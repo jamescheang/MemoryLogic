@@ -187,21 +187,21 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
                 findViewById(R.id.Image12)
         };
 
-        images = new ArrayList<>();
-        images.add(R.drawable.camel);
-        images.add(R.drawable.fox);
-        images.add(R.drawable.koala);
-        images.add(R.drawable.lion);
-        images.add(R.drawable.monkey);
-        images.add(R.drawable.wolf);
-        images.add(R.drawable.camel);
-        images.add(R.drawable.fox);
-        images.add(R.drawable.koala);
-        images.add(R.drawable.lion);
-        images.add(R.drawable.monkey);
-        images.add(R.drawable.wolf);
-
-        Collections.shuffle(images);
+//        images = new ArrayList<>();
+//        images.add(R.drawable.camel);
+//        images.add(R.drawable.fox);
+//        images.add(R.drawable.koala);
+//        images.add(R.drawable.lion);
+//        images.add(R.drawable.monkey);
+//        images.add(R.drawable.wolf);
+//        images.add(R.drawable.camel);
+//        images.add(R.drawable.fox);
+//        images.add(R.drawable.koala);
+//        images.add(R.drawable.lion);
+//        images.add(R.drawable.monkey);
+//        images.add(R.drawable.wolf);
+//
+//        Collections.shuffle(images);
 
         files = new ArrayList<>();
         files.add("image1.jpg");
@@ -216,18 +216,6 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
         files.add("image4.jpg");
         files.add("image5.jpg");
         files.add("image6.jpg");
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image1.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image2.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image3.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image4.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image5.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image6.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image1.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image2.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image3.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image4.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image5.jpg"));
-//        files.add(BitmapFactory.decodeFile(getFilesDir()+"/"+"image6.jpg"));
 
         Collections.shuffle(files);
 
@@ -298,6 +286,7 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
         }
     }
 
+    //uncomment the async related tasks below and in this's implement class above to download all 6 images
     /*@Override
     protected void onStart() {
         super.onStart();
