@@ -24,6 +24,12 @@ public class MemoryGameActivity extends AppCompatActivity {
     int clicked = 0;
     boolean turnOver = false;
     int lastClicked = -1;
+    int matched = 0;
+    ImageButton[] buttons=null;
+    // matched score
+    // clicked==1 then disable
+    // initUI()
+
 
 
     @Override
@@ -94,10 +100,13 @@ public class MemoryGameActivity extends AppCompatActivity {
                     }
                     if (clicked == 2){
                         System.out.println("Max clicked reached");
+                        buttons[lastClicked].setClickable(false);
                         turnOver = true;
                         if (buttons[finalI].getTag().toString().equalsIgnoreCase(buttons[lastClicked].getTag().toString())){
                             buttons[finalI].setClickable(false);
                             buttons[lastClicked].setClickable(false);
+                            matched++;
+                            System.out.println("Matched so far: "+ matched);
                             turnOver = false;
                             clicked = 0;
                         } else {
@@ -109,13 +118,17 @@ public class MemoryGameActivity extends AppCompatActivity {
                                     clicked = 0;
                                     buttons[finalI].setImageResource(R.drawable.code);
                                     buttons[finalI].setTag("cardBack");
+                                    buttons[finalI].setClickable(true);
                                     buttons[lastClicked].setImageResource(R.drawable.code);
                                     buttons[lastClicked].setTag("cardBack");
+                                    buttons[lastClicked].setClickable(true);
                                 }
                             }, 1000);
                         }
                     } else if (clicked == 0){
                         turnOver = false;
+                    } else if (clicked == 1){
+                        buttons[lastClicked].setClickable(false);
                     }
                 }
             });
