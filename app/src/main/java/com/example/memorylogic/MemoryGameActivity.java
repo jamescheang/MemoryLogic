@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -25,9 +26,6 @@ import java.util.Locale;
 
 public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTask.ICallback*/{
 
-    /*    private CountDownTimer mCountDownTimer;
-    private long mTimeLeftInMilliseconds = 180000;*/
-    TextView countDownTimer;
     int clicked = 0;
     boolean faceUp = false;
     int lastClicked = -1;
@@ -37,13 +35,10 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
     //Is the stopwatch running?
     private boolean running=true;//once the activity starts, the timer will start
     private boolean wasRunning;
-
     ArrayList<Integer> images=null;
     ImageButton[] buttons=null;
     ArrayList<String> files = null;
     TextView picMatch = null;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +50,6 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
             wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
         runTimer();
-        //countDownTimer = (TextView)findViewById(R.id.countDownTimer);
-
-
         initUI();
 
 //        for (int i = 0; i < images.size(); i++) {
@@ -67,6 +59,7 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
         picMatch = findViewById(R.id.picmatches);
 
         memoryLogic();
+
 
         Button reset = findViewById(R.id.resetBtn);
         reset.setOnClickListener(new View.OnClickListener() {
@@ -91,29 +84,6 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
         });
 
     }
-
-    /*protected void startTimer(){
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMilliseconds,1000) {
-            @Override
-            public void onTick(long l) {
-                mTimeLeftInMilliseconds = l;
-                updateCountDownText();
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();
-    }
-
-    void updateCountDownText(){
-        int minutes = (int)(mTimeLeftInMilliseconds / 1000) / 60;
-        int seconds = (int)(mTimeLeftInMilliseconds / 1000) % 60;
-
-        String timeLeft = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
-        countDownTimer.setText(timeLeft);
-    }*/
 
     @Override
     protected void onPause() {
@@ -143,6 +113,11 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
                 button.setClickable(true);
             }
         }
+        view.setClickable(false);
+        view.setVisibility(View.GONE);
+        Button pauseBtn=(Button)findViewById(R.id.pause);
+        pauseBtn.setClickable(true);
+        pauseBtn.setVisibility(View.VISIBLE);
     }
     //Stop the stopwatch running when the pause button is clicked.
     public void onClickStop(View view) {
@@ -153,6 +128,11 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
                 button.setClickable(false);
             }
         }
+        view.setClickable(false);
+        view.setVisibility(View.GONE);
+        Button resumeBtn=(Button)findViewById(R.id.resume);
+        resumeBtn.setClickable(true);
+        resumeBtn.setVisibility(View.VISIBLE);
         //grey out the pause button
         //enable to the resume button
     }
@@ -321,6 +301,13 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
         final EditText playerName = resultView.findViewById(R.id.playerName);
         System.out.println("current name: " + playerName.getText());
 
+        // sets the player's name in result page to whatever name's in the shared preference
+        SharedPreferences playerPref =  getSharedPreferences("player", MODE_PRIVATE);
+        if(playerPref.contains("name")){
+            playerName.setText(playerPref.getString("name",null));
+        }
+
+
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -349,7 +336,7 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
                 Boolean isError = false;
 
                 //checking for input name
-                String name = playerName.getText().toString().trim();
+                final String name = playerName.getText().toString().trim();
 
                 if(name.isEmpty()){
                     isError = true;
@@ -358,8 +345,16 @@ public class MemoryGameActivity extends AppCompatActivity /*implements MyAsyncTa
 
                 // if no errors, this block below will save all the necessary details into Shared Preference / Send to database
                 if(!isError){
-                    Toast.makeText(MemoryGameActivity.this, "Saved! Thanks for playing, " + playerName.getText().toString(), Toast.LENGTH_SHORT).show();
 //                    resultDialog.dismiss();
+                    SharedPreferences playerPref =  getSharedPreferences("player", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = playerPref.edit();
+                    editor.putString("name", name);
+                    editor.putInt("score", seconds);
+                    // Consider using `apply()` instead; `commit` writes its data to persistent storage immediately,
+                    // whereas `apply` will handle it in the background
+                    editor.apply();
+
+                    Toast.makeText(MemoryGameActivity.this, "Saved! Thanks for playing, " + playerName.getText().toString(), Toast.LENGTH_SHORT).show();
                     finish();
                     startActivity(getIntent());
                 }
